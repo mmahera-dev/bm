@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Aanya Rao — Software Engineer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap"
+    rel="stylesheet">
+  <style>
+    /* ==========================================================================
+   DESIGN TOKENS — light theme is default, dark theme overrides via [data-theme]
+   ========================================================================== */
+    :root {
+      --bg: #FAFAF8;
+      --bg-alt: #F1EFE8;
+      --panel: #FFFFFF;
+      --ink: #14171C;
+      --ink-soft: #4A5160;
+      --ink-faint: #8A8F99;
+      --line: rgba(20, 23, 28, 0.13);
+      --line-strong: rgba(20, 23, 28, 0.28);
+      --accent: #2952E3;
+      --accent-ink: #FAFAF8;
+      --accent-warm: #C96A1F;
+      --shadow: 0 20px 40px -20px rgba(20, 23, 28, 0.18);
+
+      --font-display: 'Space Grotesk', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+
+      --grid-gap: clamp(1.25rem, 3vw, 2.5rem);
+      --edge: clamp(1.25rem, 5vw, 4rem);
+      --radius: 2px;
+
+      color-scheme: light;
+    }
+
+    [data-theme="dark"] {
+      --bg: #0C0F16;
+      --bg-alt: #121826;
+      --panel: #141B29;
+      --ink: #E9EBEF;
+      --ink-soft: #A2A9B8;
+      --ink-faint: #626B7D;
+      --line: rgba(255, 255, 255, 0.11);
+      --line-strong: rgba(255, 255, 255, 0.24);
+      --accent: #6E93FF;
+      --accent-ink: #0C0F16;
+      --accent-warm: #E8974C;
+      --shadow: 0 20px 50px -20px rgba(0, 0, 0, 0.55);
+      color-scheme: dark;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html {
+        scroll-behavior: auto;
+      }
+
+      * {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      transition: background 0.35s ease, color 0.35s ease;
+      overflow-x: hidden;
+    }
+
+    h1,
+    h2,
+    h3 {
+      font-family: var(--font-display);
+      margin: 0;
+      color: var(--ink);
+    }
+
+    p {
+      margin: 0;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    button {
+      font-family: inherit;
+      cursor: pointer;
+    }
+
+    :focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* ambient blueprint grid backdrop */
+    .grid-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(var(--line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--line) 1px, transparent 1px);
+      background-size: 64px 64px;
+      opacity: 0.5;
+      mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 90%);
+    }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 0.6em;
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 1.1rem;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 22px;
+      height: 1px;
+      background: var(--accent);
+      display: inline-block;
+    }
+
+    /* corner crosshair marks — the recurring schematic motif */
+    .corner-marks {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .corner-marks span {
+      position: absolute;
+      width: 18px;
+      height: 18px;
+      border: 1px solid var(--line-strong);
+    }
+
+    .corner-marks span:nth-child(1) {
+      top: 0;
+      left: 0;
+      border-right: none;
+      border-bottom: none;
+    }
+
+    .corner-marks span:nth-child(2) {
+      top: 0;
+      right: 0;
+      border-left: none;
+      border-bottom: none;
+    }
+
+    .corner-marks span:nth-child(3) {
+      bottom: 0;
+      left: 0;
+      border-right: none;
+      border-top: none;
+    }
+
+    .corner-marks span:nth-child(4) {
+      bottom: 0;
+      right: 0;
+      border-left: none;
+      border-top: none;
+    }
+
+    .section-tag {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      letter-spacing: 0.1em;
+      color: var(--ink-faint);
+    }
+
+    /* ==========================================================================
+   HEADER — flexbox for local alignment of logo / nav / controls
+   ========================================================================== */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 82%, transparent);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .header-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 0.9rem var(--edge);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .logo {
+      font-family: var(--font-display);
+      font-weight: 700;
+      font-size: 1.15rem;
+      letter-spacing: -0.01em;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .nav {
+      display: none;
+      gap: 2rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+
+    .nav a {
+      position: relative;
+      padding: 0.25rem 0;
+      transition: color 0.2s;
+    }
+
+    .nav a:hover {
+      color: var(--ink);
+    }
+
+    .nav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: -2px;
+      width: 0;
+      height: 1px;
+      background: var(--accent);
+      transition: width 0.25s ease;
+    }
+
+    .nav a:hover::after {
+      width: 100%;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    /* theme toggle styled as a physical rocker switch */
+    .theme-toggle {
+      background: none;
+      border: none;
+      padding: 0;
+      display: flex;
+    }
+
+    .toggle-track {
+      width: 46px;
+      height: 24px;
+      background: var(--bg-alt);
+      border: 1px solid var(--line-strong);
+      border-radius: 999px;
+      position: relative;
+      display: flex;
+      align-items: center;
+      padding: 2px;
+      transition: background 0.3s ease;
+    }
+
+    .toggle-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: var(--accent);
+      transform: translateX(0);
+      transition: transform 0.3s cubic-bezier(.65, 0, .35, 1), background 0.3s ease;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    }
+
+    [data-theme="dark"] .toggle-thumb {
+      transform: translateX(22px);
+      background: var(--accent-warm);
+    }
+
+    .nav-burger {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 5px;
+      width: 28px;
+      height: 22px;
+      background: none;
+      border: none;
+      padding: 0;
+    }
+
+    .nav-burger span {
+      display: block;
+      height: 1.5px;
+      width: 100%;
+      background: var(--ink);
+      transition: transform 0.25s ease, opacity 0.25s ease;
+    }
+
+    .nav-burger.open span:nth-child(1) {
+      transform: translateY(6.5px) rotate(45deg);
+    }
+
+    .nav-burger.open span:nth-child(2) {
+      opacity: 0;
+    }
+
+    .nav-burger.open span:nth-child(3) {
+      transform: translateY(-6.5px) rotate(-45deg);
+    }
+
+    .mobile-nav {
+      max-height: 0;
+      overflow: hidden;
+      border-bottom: 1px solid transparent;
+      transition: max-height 0.35s ease, border-color 0.35s ease;
+      background: var(--bg);
+    }
+
+    .mobile-nav.open {
+      max-height: 260px;
+      border-color: var(--line);
+    }
+
+    .mobile-nav ul {
+      display: flex;
+      flex-direction: column;
+      padding: 0.5rem var(--edge) 1.25rem;
+      gap: 0.9rem;
+    }
+
+    .mobile-nav a {
+      font-size: 1rem;
+      font-weight: 500;
+      color: var(--ink-soft);
+    }
+
+    /* ==========================================================================
+   LAYOUT PRIMITIVES
+   ========================================================================== */
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .wrap {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding-left: var(--edge);
+      padding-right: var(--edge);
+    }
+
+    section {
+      padding-block: clamp(3.5rem, 8vw, 7rem);
+      position: relative;
+    }
+
+    section+section {
+      border-top: 1px solid var(--line);
+    }
+
+    /* ==========================================================================
+   HERO — CSS Grid, mobile-first (1 col → 2 col)
+   ========================================================================== */
+    .hero {
+      padding-top: clamp(3rem, 9vw, 6rem);
+    }
+
+    .hero .wrap {
+      position: relative;
+    }
+
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: clamp(2.5rem, 6vw, 4rem);
+      align-items: center;
+    }
+
+    .hero-copy h1 {
+      font-size: clamp(2.4rem, 6vw, 4.2rem);
+      line-height: 1.04;
+      letter-spacing: -0.02em;
+      font-weight: 600;
+    }
+
+    .hero-desc {
+      margin-top: 1.5rem;
+      max-width: 46ch;
+      color: var(--ink-soft);
+      font-size: 1.05rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-top: 2.25rem;
+    }
+
+    .btn-primary,
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 600;
+      border-radius: var(--radius);
+      transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: var(--accent-ink);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+    }
+
+    .btn-ghost {
+      border: 1px solid var(--line-strong);
+    }
+
+    .btn-ghost:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .hero-panel {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+      padding: 2rem;
+      font-family: var(--font-mono);
+    }
+
+    .hero-panel-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 1rem;
+      margin-bottom: 1.25rem;
+      border-bottom: 1px dashed var(--line-strong);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+    }
+
+    .readout {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .readout-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .readout-row .k {
+      color: var(--ink-soft);
+      font-size: 0.82rem;
+    }
+
+    .readout-row .v {
+      font-size: 1.6rem;
+      font-family: var(--font-display);
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .readout-row .v small {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      font-weight: 400;
+      color: var(--ink-faint);
+      margin-left: 0.35rem;
+    }
+
+    /* ==========================================================================
+   ABOUT — grid label column + prose column
+   ========================================================================== */
+    .about-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+    }
+
+    .about-label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .about-label h2 {
+      font-size: 1.6rem;
+    }
+
+    .about-body {
+      color: var(--ink-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      max-width: 62ch;
+      font-size: 1.02rem;
+    }
+
+    .about-body strong {
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    /* ==========================================================================
+   SKILLS — flexbox chip groups
+   ========================================================================== */
+    .skills-groups {
+      display: flex;
+      flex-direction: column;
+      gap: 2rem;
+      margin-top: 2.5rem;
+    }
+
+    .skill-group-label {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+      margin-bottom: 0.9rem;
+      display: block;
+    }
+
+    .chip-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+
+    .chip {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      padding: 0.5rem 0.9rem;
+      border: 1px solid var(--line);
+      background: var(--bg-alt);
+      border-radius: 999px;
+      color: var(--ink-soft);
+      transition: border-color 0.2s ease, color 0.2s ease;
+    }
+
+    .chip:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+   WORK — bento-style CSS Grid
+   ========================================================================== */
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--grid-gap);
+      margin-top: 2.5rem;
+    }
+
+    .card {
+      position: relative;
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow);
+    }
+
+    .card-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+
+    .card-fig {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--accent);
+      letter-spacing: 0.08em;
+    }
+
+    .card h3 {
+      font-size: 1.2rem;
+      margin-top: 0.35rem;
+    }
+
+    .card p {
+      color: var(--ink-soft);
+      font-size: 0.95rem;
+    }
+
+    .card-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: auto;
+    }
+
+    .card-tags span {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      color: var(--ink-faint);
+      border: 1px solid var(--line);
+      padding: 0.25rem 0.6rem;
+    }
+
+    .card-link {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .card-link svg {
+      width: 14px;
+      height: 14px;
+      transition: transform 0.2s ease;
+    }
+
+    .card:hover .card-link svg {
+      transform: translate(2px, -2px);
+    }
+
+    .card--featured {
+      background: linear-gradient(160deg, var(--panel), var(--bg-alt));
+    }
+
+    /* ==========================================================================
+   CONTACT — grid two-panel
+   ========================================================================== */
+    .contact-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 2.5rem;
+      margin-top: 2.5rem;
+    }
+
+    .contact-info {
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .contact-info h2 {
+      font-size: 2rem;
+      letter-spacing: -0.01em;
+    }
+
+    .contact-info p {
+      color: var(--ink-soft);
+      max-width: 44ch;
+    }
+
+    .contact-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      font-family: var(--font-mono);
+      font-size: 0.92rem;
+    }
+
+    .contact-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      color: var(--ink-soft);
+      transition: color 0.2s ease;
+      width: fit-content;
+    }
+
+    .contact-links a:hover {
+      color: var(--accent);
+    }
+
+    .contact-links a::before {
+      content: "→";
+      color: var(--accent);
+    }
+
+    .form {
+      background: var(--panel);
+      border: 1px solid var(--line);
+      padding: 1.75rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .field label {
+      font-family: var(--font-mono);
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+      text-transform: uppercase;
+    }
+
+    .field input,
+    .field textarea {
+      background: var(--bg-alt);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 0.75rem 0.9rem;
+      color: var(--ink);
+      font-family: var(--font-body);
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease;
+    }
+
+    .field input:focus,
+    .field textarea:focus {
+      border-color: var(--accent);
+      outline: none;
+    }
+
+    .field textarea {
+      resize: vertical;
+      min-height: 110px;
+    }
+
+    .form .btn-primary {
+      align-self: flex-start;
+      border: none;
+    }
+
+    /* ==========================================================================
+   FOOTER — flexbox
+   ========================================================================== */
+    footer {
+      border-top: 1px solid var(--line);
+      padding: 1.75rem var(--edge);
+    }
+
+    .footer-inner {
+      max-width: 1240px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      align-items: flex-start;
+      font-family: var(--font-mono);
+      font-size: 0.78rem;
+      color: var(--ink-faint);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 1.25rem;
+    }
+
+    .footer-links a:hover {
+      color: var(--accent);
+    }
+
+    /* ==========================================================================
+   MEDIA QUERIES — mobile-first progressive enhancement
+   ========================================================================== */
+    @media (min-width: 640px) {
+      .work-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .work-grid .card--featured {
+        grid-column: span 2;
+      }
+    }
+
+    @media (min-width: 860px) {
+      .nav {
+        display: flex;
+      }
+
+      .nav-burger {
+        display: none;
+      }
+
+      .hero-grid {
+        grid-template-columns: 1.15fr 0.85fr;
+      }
+
+      .about-grid {
+        grid-template-columns: 0.8fr 1.6fr;
+      }
+
+      .contact-grid {
+        grid-template-columns: 0.9fr 1.1fr;
+      }
+    }
+
+    @media (min-width: 1080px) {
+      .work-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .work-grid .card--featured {
+        grid-column: span 2;
+        grid-row: span 1;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="light">
+
+  <div class="grid-overlay"></div>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#top" class="logo">BM<span>.</span></a>
+      <nav class="nav" aria-label="Primary">
+        <a href="#work">Work</a>
+        <a href="#about">About</a>
+        <a href="#skills">Skills</a>
+        <a href="#contact">Contact</a>
+      </nav>
+      <div class="header-controls">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode" aria-pressed="false">
+          <span class="toggle-track"><span class="toggle-thumb"></span></span>
+        </button>
+        <button class="nav-burger" id="navBurger" aria-label="Open menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+    <div class="mobile-nav" id="mobileNav">
+      <ul>
+        <li><a href="#work">Work</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- HERO -->
+    <section class="hero" id="top">
+      <div class="corner-marks"><span></span><span></span><span></span><span></span></div>
+      <div class="wrap">
+        <div class="hero-grid">
+          <div class="hero-copy">
+            <p class="eyebrow">SEC—A / SOFTWARE ENGINEER</p>
+            <h1>Building systems<br>that hold up<br>under load.</h1>
+            <p class="hero-desc">I'm Aanya Rao — a backend-leaning full-stack engineer who cares about clean interfaces,
+              honest data models, and code that's still readable a year from now.</p>
+            <div class="hero-actions">
+              <a class="btn-primary" href="#work">View the work</a>
+              <a class="btn-ghost" href="#contact">Get in touch</a>
+            </div>
+          </div>
+          <div class="hero-panel">
+            <div class="hero-panel-head">
+              <span>PROFILE / 04.2026</span>
+              <span>REV. 3</span>
+            </div>
+            <div class="readout">
+              <div class="readout-row"><span class="k">Experience</span><span class="v">1<small>yrs</small></span></div>
+              <div class="readout-row"><span class="k">Shipped projects</span><span
+                  class="v">27<small>total</small></span></div>
+              <div class="readout-row"><span class="k">Primary stack</span><span class="v">Java<small>/ TS/
+                    Go</small></span></div>
+              <div class="readout-row"><span class="k">Based in</span><span class="v">Remote<small>IST
+                    +5:30</small></span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ABOUT -->
+    <section id="about">
+      <div class="wrap">
+        <div class="about-grid">
+          <div class="about-label">
+            <span class="section-tag">FIG.—02</span>
+            <h2>About</h2>
+          </div>
+          <div class="about-body">
+            <p>I started out writing Java on a hand-me-down laptop, learning the hard way that inheritance hierarchies
+              get ugly fast if you don't respect the interfaces underneath them. That lesson stuck — <strong>most of my
+                work now is about drawing clear boundaries</strong> between systems so they can change independently.
+            </p>
+            <p>Over the last five years I've worked across backend services, cloud infrastructure, and the occasional
+              compliance-heavy project where the code had to satisfy both an engineering review and a legal one. That
+              mix taught me to write systems that are not just correct, but explainable.</p>
+            <p>Outside of shipping features, I spend time reading up on regulatory frameworks that touch software — data
+              protection, IT law, that sort of thing — because the constraints outside the codebase shape the ones
+              inside it.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SKILLS -->
+    <section id="skills">
+      <div class="wrap">
+        <span class="section-tag">FIG.—03</span>
+        <h2 style="font-size:1.6rem; margin-top:0.75rem;">Skills &amp; Stack</h2>
+        <div class="skills-groups">
+          <div>
+            <span class="skill-group-label">Languages</span>
+            <div class="chip-row">
+              <span class="chip">Java</span><span class="chip">TypeScript</span><span class="chip">Go</span>
+              <span class="chip">Python</span><span class="chip">SQL</span>
+            </div>
+          </div>
+          <div>
+            <span class="skill-group-label">Frameworks &amp; Libraries</span>
+            <div class="chip-row">
+              <span class="chip">Spring Boot</span><span class="chip">React</span><span class="chip">Node.js</span>
+              <span class="chip">Express</span><span class="chip">JUnit</span>
+            </div>
+          </div>
+          <div>
+            <span class="skill-group-label">Infrastructure &amp; Tools</span>
+            <div class="chip-row">
+              <span class="chip">AWS</span><span class="chip">Docker</span><span class="chip">Kubernetes</span>
+              <span class="chip">PostgreSQL</span><span class="chip">Redis</span><span class="chip">Git</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- WORK -->
+    <section id="work">
+      <div class="wrap">
+        <span class="section-tag">FIG.—04</span>
+        <h2 style="font-size:1.6rem; margin-top:0.75rem;">Selected Work</h2>
+        <div class="work-grid">
+
+          <article class="card card--featured">
+            <div class="card-head">
+              <div>
+                <span class="card-fig">PROJECT / 01</span>
+                <h3>Ledger — Real-time reconciliation engine</h3>
+              </div>
+            </div>
+            <p>A distributed system that reconciles payment events across three banking partners in under 400ms,
+              replacing a nightly batch job that used to take four hours.</p>
+            <div class="card-tags"><span>Java</span><span>Kafka</span><span>PostgreSQL</span></div>
+            <a class="card-link" href="#">View case study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <span class="card-fig">PROJECT / 02</span>
+                <h3>Compliance Sync</h3>
+              </div>
+            </div>
+            <p>An internal tool that maps data flows against IT Act and GDPR requirements for a mid-size fintech,
+              flagging gaps before audits do.</p>
+            <div class="card-tags"><span>TypeScript</span><span>React</span></div>
+            <a class="card-link" href="#">View case study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <span class="card-fig">PROJECT / 03</span>
+                <h3>Fleetline</h3>
+              </div>
+            </div>
+            <p>A logistics dashboard tracking 1,200+ vehicles in real time, built on a Go backend with a WebSocket layer
+              for live position updates.</p>
+            <div class="card-tags"><span>Go</span><span>Redis</span><span>WebSockets</span></div>
+            <a class="card-link" href="#">View case study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </article>
+
+          <article class="card">
+            <div class="card-head">
+              <div>
+                <span class="card-fig">PROJECT / 04</span>
+                <h3>Bankline OOP Kit</h3>
+              </div>
+            </div>
+            <p>An open-source teaching library demonstrating abstract classes and inheritance through a small
+              bank-account simulation, used in two university courses.</p>
+            <div class="card-tags"><span>Java</span><span>JUnit</span></div>
+            <a class="card-link" href="#">View case study
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M7 17L17 7M17 7H7M17 7V17" />
+              </svg>
+            </a>
+          </article>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="wrap">
+        <div class="contact-grid">
+          <div class="contact-info">
+            <span class="section-tag">FIG.—05</span>
+            <h2>Let's build something that lasts.</h2>
+            <p>Open to backend-heavy full-stack roles and short technical consulting engagements. Based remotely,
+              working IST hours with overlap into GMT.</p>
+            <div class="contact-links">
+              <a href="mailto:hello@aanyarao.dev">hello@aanyarao.dev</a>
+              <a href="#">github.com/aanyarao</a>
+              <a href="#">linkedin.com/in/aanyarao</a>
+            </div>
+          </div>
+          <form class="form" onsubmit="return false;">
+            <div class="field">
+              <label for="name">Name</label>
+              <input id="name" type="text" placeholder="Your name" required>
+            </div>
+            <div class="field">
+              <label for="email">Email</label>
+              <input id="email" type="email" placeholder="you@example.com" required>
+            </div>
+            <div class="field">
+              <label for="message">Message</label>
+              <textarea id="message" placeholder="What are you building?" required></textarea>
+            </div>
+            <button type="submit" class="btn-primary">Send message</button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <span>© 2026 Aanya Rao — built with CSS Grid, Flexbox &amp; custom properties.</span>
+      <div class="footer-links">
+        <a href="#top">Back to top ↑</a>
+        <a href="">GitHub</a>
+        <a href="#">LinkedIn</a>
+      </div>
+    </div>
+  </footer>
+  <script>
+    // Theme toggle — in-memory only, defaults to system preference
+    const root = document.body;
+    const themeToggle = document.getElementById('themeToggle');
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    if (prefersDark) { root.setAttribute('data-theme', 'dark'); themeToggle.setAttribute('aria-pressed', 'true'); }
+
+    themeToggle.addEventListener('click', () => {
+      const isDark = root.getAttribute('data-theme') === 'dark';
+      root.setAttribute('data-theme', isDark ? 'light' : 'dark');
+      themeToggle.setAttribute('aria-pressed', String(!isDark));
+    });
+
+    // Mobile nav
+    const burger = document.getElementById('navBurger');
+    const mobileNav = document.getElementById('mobileNav');
+    burger.addEventListener('click', () => {
+      const isOpen = mobileNav.classList.toggle('open');
+      burger.classList.toggle('open', isOpen);
+      burger.setAttribute('aria-expanded', String(isOpen));
+    });
+    mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileNav.classList.remove('open');
+      burger.classList.remove('open');
+      burger.setAttribute('aria-expanded', 'false');
+    }));
+  </script>
+</body>
+
+</html>
